@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
     before_action :find_task, only: [:show, :edit, :update, :destroy]
 
     def index
+        @tasks = Task.all.order("created_at DESC")
     end
 
     def show
@@ -26,9 +27,16 @@ class ApplicationController < ActionController::Base
     end
 
     def update
+        if @task.update(tasks_params)
+            redirect_to @task
+        else
+            render "Edit"
+        end
     end
 
     def destroy
+        @task.destroy
+        redirect_to root_path
     end
 
     private
